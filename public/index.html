@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý lịch họp, Phòng họp</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='2' width='28' height='28' rx='6' fill='%23005A9C'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' fill='%23ffffff'/%3E%3Crect x='23' y='0' width='2' height='5' rx='1' fill='%23ffffff'/%3E%3Crect x='5' y='9' width='22' height='18' rx='3' fill='%23ffffff'/%3E%3Ccircle cx='10' cy='14' r='1.5' fill='%23005A9C'/%3E%3Ccircle cx='16' cy='14' r='1.5' fill='%23005A9C'/%3E%3Ccircle cx='22' cy='14' r='1.5' fill='%23005A9C'/%3E%3Ccircle cx='10' cy='19' r='1.5' fill='%23005A9C'/%3E%3Ccircle cx='16' cy='19' r='1.5' fill='%23005A9C'/%3E%3Ccircle cx='22' cy='19' r='1.5' fill='%23005A9C'/%3E%3Ccircle cx='10' cy='24' r='1.5' fill='%23005A9C'/%3E%3Ccircle cx='16' cy='24' r='1.5' fill='%23F7941E'/%3E%3Ccircle cx='22' cy='24' r='1.5' fill='%23005A9C'/%3E%3C/svg%3E">
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <link href="style.css?v=9" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-area">
+                <div class="icon">📅</div>
+                <div class="title">
+                    <h1>Quản lý lịch họp, Phòng họp</h1>
+                    <p>Công ty Điện lực Vũng Tàu</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="all-events">Lịch Chung</button>
+                    <button class="tab-btn" data-tab="room-events">Lịch Phòng Họp</button>
+                </div>
+                <button id="refresh-btn" class="btn btn-primary">
+                    <span class="icon">↻</span> Làm mới
+                </button>
+            </div>
+        </header>
+
+        <!-- Filters Area -->
+        <div class="filters-area" style="display: flex; width: 100%; align-items: center; gap: 1rem;">
+            <!-- Nút này dùng chung cho cả 2 Tab -->
+            <button id="toggle-weekends-btn" class="btn" style="white-space: nowrap; flex-shrink: 0;">Ẩn/Hiện Cuối Tuần</button>
+
+            <!-- Filter for Tab 1: Lịch Chung -->
+            <div id="filter-all-events" class="filter-group active-filter" style="flex: 1; justify-content: flex-end; margin: 0;">
+            </div>
+
+            <!-- Filter for Tab 2: Lịch Phòng Họp -->
+            <div id="filter-room-events" class="filter-group" style="flex: 1; justify-content: flex-end; gap: 1rem; margin: 0;">
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <label for="room-filter" style="white-space: nowrap; margin-bottom: 0;">Chọn Phòng:</label>
+                    <select id="room-filter" class="btn filter-select" style="min-width: auto; padding: 0.5rem;">
+                        <option value="">-- Tất cả phòng --</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <label for="room-date-picker" style="white-space: nowrap; margin-bottom: 0;">Chọn Ngày:</label>
+                    <input type="date" id="room-date-picker" class="btn filter-select" style="font-family: inherit; min-width: auto; padding: 0.5rem;">
+                </div>
+
+                <div class="tabs" style="background: white; border: 1px solid var(--border-color); white-space: nowrap; flex-shrink: 0;">
+                    <button class="tab-btn active" id="btn-view-week">Xem theo Tuần</button>
+                    <button class="tab-btn" id="btn-view-day">Xem theo Ngày</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Calendar Area -->
+        <main class="calendar-wrapper">
+            <div id="loader" class="loader-overlay" style="display: none;">
+                <div class="spinner"></div>
+                <p>Đang đồng bộ dữ liệu từ Outlook...</p>
+            </div>
+            
+            <!-- Standard FullCalendar (Lịch Chung) -->
+            <div id="calendar"></div>
+
+            <!-- Custom Rooms Schedule View (Lịch Phòng Họp) -->
+            <div id="rooms-schedule-container" class="rooms-container" style="display: none;">
+                <!-- Header for Custom View -->
+                <div class="rooms-header-controls">
+                    <button class="btn" id="btn-prev-week">❮ Tuần trước</button>
+                    <h2 id="rooms-current-week-label">Tuần này</h2>
+                    <button class="btn" id="btn-next-week">Tuần sau ❯</button>
+                </div>
+                <!-- Content will be injected here by app.js -->
+                <div id="rooms-cards-wrapper"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Event Detail Modal -->
+    <div id="event-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Tiêu đề cuộc họp</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info-row">
+                    <span class="modal-icon">🕒</span>
+                    <div class="modal-text">
+                        <strong>Thời gian:</strong>
+                        <div id="modal-time">08:00 - 10:00</div>
+                    </div>
+                </div>
+                <div class="modal-info-row">
+                    <span class="modal-icon">📍</span>
+                    <div class="modal-text">
+                        <strong>Địa điểm:</strong>
+                        <div id="modal-location">Phòng A206</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btn-close-modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/vi.js"></script>
+    <!-- Custom JS with cache-busting -->
+    <script src="app.js?v=14"></script>
+</body>
+</html>

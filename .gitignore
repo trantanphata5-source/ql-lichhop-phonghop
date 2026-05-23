@@ -1,0 +1,4 @@
+node_modules
+.env
+debug_error.log
+public/debug_error.log
