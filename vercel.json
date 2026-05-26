@@ -2,10 +2,6 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/api/calendar",
-      "destination": "/public/debug_events.json"
-    },
-    {
       "source": "/(.*)",
       "destination": "/public/$1"
     }
@@ -17,10 +13,6 @@
         {
           "key": "Cache-Control",
           "value": "no-cache, no-store, must-revalidate"
-        },
-        {
-          "key": "Content-Type",
-          "value": "application/json; charset=utf-8"
         }
       ]
     }
