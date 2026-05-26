@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             filterAndRenderEvents(data, successCallback);
                         } else {
                             renderRoomsSchedule();
-                            successCallback([]); // FullCalendar trống
+                            if (successCallback) successCallback([]); // FullCalendar trống
                         }
                     } else {
                         throw new Error('Dữ liệu không đúng định dạng');

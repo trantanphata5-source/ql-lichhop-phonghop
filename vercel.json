@@ -3,11 +3,26 @@
   "rewrites": [
     {
       "source": "/api/calendar",
-      "destination": "/debug_events.json"
+      "destination": "/public/debug_events.json"
     },
     {
       "source": "/(.*)",
       "destination": "/public/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/calendar",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        }
+      ]
     }
   ]
 }
