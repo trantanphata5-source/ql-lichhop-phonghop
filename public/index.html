@@ -69,25 +69,28 @@
                 <p>Đang đồng bộ dữ liệu từ Outlook...</p>
             </div>
             
-            <!-- Live Meeting Tracker -->
-            <div id="live-meetings-tracker" class="live-tracker">
-                <div class="tracker-column ongoing">
-                    <h3><span class="status-dot blink"></span>Đang diễn ra</h3>
-                    <div id="ongoing-meetings-list" class="tracker-list">
-                        <div class="empty-state">Đang cập nhật...</div>
-                    </div>
+            <!-- All Events View Wrapper -->
+            <div id="all-events-view" class="all-events-layout">
+                <!-- Standard FullCalendar (Lịch Chung) -->
+                <div id="calendar-container" class="calendar-main">
+                    <div id="calendar"></div>
                 </div>
-                <div class="tracker-column upcoming">
-                    <h3>🕒 Sắp diễn ra hôm nay</h3>
-                    <div id="upcoming-meetings-list" class="tracker-list">
-                        <div class="empty-state">Đang cập nhật...</div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Standard FullCalendar (Lịch Chung) -->
-            <div id="calendar-container">
-                <div id="calendar"></div>
+                <!-- Live Meeting Tracker -->
+                <div id="live-meetings-tracker" class="live-tracker">
+                    <div class="tracker-column ongoing">
+                        <h3><span class="status-dot blink"></span>Đang diễn ra</h3>
+                        <div id="ongoing-meetings-list" class="tracker-list">
+                            <div class="empty-state">Đang cập nhật...</div>
+                        </div>
+                    </div>
+                    <div class="tracker-column upcoming">
+                        <h3>🕒 Sắp diễn ra hôm nay</h3>
+                        <div id="upcoming-meetings-list" class="tracker-list">
+                            <div class="empty-state">Đang cập nhật...</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Custom Rooms Schedule View (Lịch Phòng Họp) -->

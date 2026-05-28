@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const tabBtns = document.querySelectorAll('.tab-btn[data-tab]');
     const filterAllEvents = document.getElementById('filter-all-events');
     const filterRoomEvents = document.getElementById('filter-room-events');
+    const allEventsViewEl = document.getElementById('all-events-view');
     const liveTrackerEl = document.getElementById('live-meetings-tracker');
     const ongoingListEl = document.getElementById('ongoing-meetings-list');
     const upcomingListEl = document.getElementById('upcoming-meetings-list');
@@ -549,16 +550,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if (currentTab === 'all-events') {
                 filterAllEvents.classList.add('active-filter');
                 filterRoomEvents.classList.remove('active-filter');
-                calendarEl.style.display = 'block';
-                liveTrackerEl.style.display = 'grid';
+                allEventsViewEl.style.display = 'flex';
                 roomsContainerEl.style.display = 'none';
                 calendar.render(); // Re-render to fix sizes
                 calendar.refetchEvents();
             } else {
                 filterAllEvents.classList.remove('active-filter');
                 filterRoomEvents.classList.add('active-filter');
-                calendarEl.style.display = 'none';
-                liveTrackerEl.style.display = 'none';
+                allEventsViewEl.style.display = 'none';
                 roomsContainerEl.style.display = 'block';
                 renderRoomsSchedule();
             }

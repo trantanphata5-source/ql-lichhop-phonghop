@@ -701,3 +701,43 @@ body {
         grid-template-columns: 1fr;
     }
 }
+/* Layout Overrides for right-side tracker */
+.all-events-layout {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.calendar-main {
+    flex: 1;
+    min-width: 0;
+    background: var(--surface-color);
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.live-tracker {
+    width: 320px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+}
+
+@media (max-width: 1024px) {
+    .all-events-layout {
+        flex-direction: column-reverse;
+    }
+    .live-tracker {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .live-tracker {
+        grid-template-columns: 1fr;
+    }
+}
