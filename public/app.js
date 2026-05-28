@@ -205,7 +205,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return 'Phòng họp 3 cũ (C203)';
         }
 
-        return null; // Không thuộc 4 phòng trên
+        // 5. Hội trường công ty
+        if (l.includes('hội trường') || l.includes('60 trần hưng đạo') || l.includes('hoi truong')) {
+            return 'Hội trường công ty';
+        }
+
+        return null; // Không thuộc 5 phòng trên
     }
 
     // Logic cho Tab Lịch Chung (FullCalendar)
@@ -345,8 +350,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Nhóm theo tên phòng chuẩn
         const roomsMap = new Map();
-        // Để hiển thị cả 4 phòng ngay cả khi không có sự kiện (nếu chưa chọn phòng lọc)
-        const targetRooms = selectedRoom ? [selectedRoom] : ['Phòng họp 1 (A206)', 'Phòng họp 2 (A204)', 'Phòng họp 3 (A203)', 'Phòng họp 3 cũ (C203)'];
+        // Để hiển thị cả 5 phòng ngay cả khi không có sự kiện (nếu chưa chọn phòng lọc)
+        const targetRooms = selectedRoom ? [selectedRoom] : ['Phòng họp 1 (A206)', 'Phòng họp 2 (A204)', 'Phòng họp 3 (A203)', 'Phòng họp 3 cũ (C203)', 'Hội trường công ty'];
         
         targetRooms.forEach(room => roomsMap.set(room, []));
 
@@ -498,7 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
             roomFilter.remove(1);
         }
 
-        const sortedRooms = ['Phòng họp 1 (A206)', 'Phòng họp 2 (A204)', 'Phòng họp 3 (A203)', 'Phòng họp 3 cũ (C203)'];
+        const sortedRooms = ['Phòng họp 1 (A206)', 'Phòng họp 2 (A204)', 'Phòng họp 3 (A203)', 'Phòng họp 3 cũ (C203)', 'Hội trường công ty'];
         sortedRooms.forEach(room => {
             const option = document.createElement('option');
             option.value = room;

@@ -1,4 +1,4 @@
-:root {
+ï»¿:root {
     --primary-color: #005A9C; /* EVN Blue */
     --primary-light: #e6f0f9;
     --secondary-color: #F7941E; /* EVN Orange */
@@ -32,7 +32,8 @@ body {
 }
 
 .app-container {
-    max-width: 1600px;
+    max-width: 1920px;
+    width: 98%;
     margin: 0 auto;
     padding: 2rem;
     min-height: 100vh;
@@ -580,7 +581,7 @@ body {
 }
 
 
-/* Cho phép ch? trong ô l?ch t? d?ng xu?ng dòng thay vì b? c?t b?t */
+/* Cho phÃ©p ch? trong Ã´ l?ch t? d?ng xu?ng dÃ²ng thay vÃ¬ b? c?t b?t */
 .fc-event-title {
     white-space: normal !important;
     overflow: visible !important;
@@ -718,7 +719,7 @@ body {
 }
 
 .live-tracker {
-    width: 320px;
+    width: 380px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
