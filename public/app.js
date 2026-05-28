@@ -61,12 +61,20 @@ document.addEventListener('DOMContentLoaded', function() {
         initialView: 'timeGridWeek',
         locale: 'vi',
         headerToolbar: {
-            left: 'prev,next today',
+            left: 'prev,next customToday',
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
+        customButtons: {
+            customToday: {
+                text: 'Hôm nay',
+                click: function() {
+                    calendar.changeView('timeGridDay');
+                    calendar.today();
+                }
+            }
+        },
         buttonText: {
-            today: 'Hôm nay',
             month: 'Tháng',
             week: 'Tuần',
             day: 'Ngày'
