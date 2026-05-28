@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const tabBtns = document.querySelectorAll('.tab-btn[data-tab]');
     const filterAllEvents = document.getElementById('filter-all-events');
     const filterRoomEvents = document.getElementById('filter-room-events');
+    const liveTrackerEl = document.getElementById('live-meetings-tracker');
+    const ongoingListEl = document.getElementById('ongoing-meetings-list');
+    const upcomingListEl = document.getElementById('upcoming-meetings-list');
 
     // Custom View Controls
     const btnPrevWeek = document.getElementById('btn-prev-week');
@@ -191,17 +194,21 @@ document.addEventListener('DOMContentLoaded', function() {
             return 'Phòng họp 2 (A204)';
         }
 
-        // 3. Phòng họp 3 (C203)
-        if (l.includes('c203') || /\b203\b/.test(l) || /phòng\s*(họp\s*)?3\b/.test(l)) {
-            return 'Phòng họp 3 (C203)';
+        // 3. Phòng họp 3 (A203)
+        if (l.includes('a203') || (/\b203\b/.test(l) && !l.includes('c203')) || (/phòng\s*(họp\s*)?3\b/.test(l) && !l.includes('c203') && !l.includes('cũ'))) {
+            return 'Phòng họp 3 (A203)';
         }
 
-        return null; // Không thuộc 3 phòng trên
+        // 4. Phòng họp 3 cũ (C203)
+        if (l.includes('c203') || /phòng\s*(họp\s*)?3\s*cũ\b/.test(l)) {
+            return 'Phòng họp 3 cũ (C203)';
+        }
+
+        return null; // Không thuộc 4 phòng trên
     }
 
     // Logic cho Tab Lịch Chung (FullCalendar)
     function filterAndRenderEvents(data, successCallback) {
-        // Mặc định luôn show tất cả
         const filteredData = data;
 
         const busyEvents = filteredData.map(item => {
@@ -219,8 +226,66 @@ document.addEventListener('DOMContentLoaded', function() {
             };
         }).filter(e => e !== null);
 
+        updateLiveTracker(busyEvents);
+
         if (successCallback) successCallback(busyEvents);
     }
+
+    function updateLiveTracker(events) {
+        if (!ongoingListEl || !upcomingListEl) return;
+        const now = new Date();
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+        const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+
+        let ongoing = [];
+        let upcoming = [];
+
+        events.forEach(evt => {
+            const start = new Date(evt.start);
+            const end = new Date(evt.end);
+
+            // Bỏ qua nếu không phải hôm nay (tạm thời tracker chỉ quan tâm sự kiện đang/sẽ diễn ra hôm nay)
+            if (end < now || start > endOfToday) return;
+
+            if (start <= now && end >= now) {
+                ongoing.push(evt);
+            } else if (start > now && start <= endOfToday) {
+                upcoming.push(evt);
+            }
+        });
+
+        // Sắp xếp tăng dần theo thời gian bắt đầu
+        upcoming.sort((a, b) => new Date(a.start) - new Date(b.start));
+
+        function createEventHTML(evt, isOngoing) {
+            const startTime = new Date(evt.start).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+            const endTime = new Date(evt.end).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+            return `
+                <div class="tracker-item" onclick="document.dispatchEvent(new CustomEvent('openEventModal', {detail: {title: '${evt.title.replace(/'/g, "\\'")}', start: '${evt.start}', end: '${evt.end}', location: '${evt.location.replace(/'/g, "\\'")}'}}))">
+                    <div class="tracker-time">${startTime} - ${endTime}</div>
+                    <div class="tracker-title">${evt.title}</div>
+                    ${evt.location ? `<div class="tracker-loc">📍 ${evt.location}</div>` : ''}
+                </div>
+            `;
+        }
+
+        if (ongoing.length === 0) {
+            ongoingListEl.innerHTML = '<div class="empty-state">Hiện không có cuộc họp nào</div>';
+        } else {
+            ongoingListEl.innerHTML = ongoing.map(e => createEventHTML(e, true)).join('');
+        }
+
+        if (upcoming.length === 0) {
+            upcomingListEl.innerHTML = '<div class="empty-state">Không có cuộc họp sắp tới trong ngày</div>';
+        } else {
+            upcomingListEl.innerHTML = upcoming.map(e => createEventHTML(e, false)).join('');
+        }
+    }
+
+    // Lắng nghe event mở modal từ tracker
+    document.addEventListener('openEventModal', function(e) {
+        openEventModal(e.detail.title, new Date(e.detail.start), new Date(e.detail.end), e.detail.location);
+    });
 
     // Logic cho Tab Lịch Phòng Họp (Custom HTML)
     function renderRoomsSchedule() {
@@ -279,8 +344,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Nhóm theo tên phòng chuẩn
         const roomsMap = new Map();
-        // Để hiển thị cả 3 phòng ngay cả khi không có sự kiện (nếu chưa chọn phòng lọc)
-        const targetRooms = selectedRoom ? [selectedRoom] : ['Phòng họp 1 (A206)', 'Phòng họp 2 (A204)', 'Phòng họp 3 (C203)'];
+        // Để hiển thị cả 4 phòng ngay cả khi không có sự kiện (nếu chưa chọn phòng lọc)
+        const targetRooms = selectedRoom ? [selectedRoom] : ['Phòng họp 1 (A206)', 'Phòng họp 2 (A204)', 'Phòng họp 3 (A203)', 'Phòng họp 3 cũ (C203)'];
         
         targetRooms.forEach(room => roomsMap.set(room, []));
 
@@ -432,7 +497,7 @@ document.addEventListener('DOMContentLoaded', function() {
             roomFilter.remove(1);
         }
 
-        const sortedRooms = ['Phòng họp 1 (A206)', 'Phòng họp 2 (A204)', 'Phòng họp 3 (C203)'];
+        const sortedRooms = ['Phòng họp 1 (A206)', 'Phòng họp 2 (A204)', 'Phòng họp 3 (A203)', 'Phòng họp 3 cũ (C203)'];
         sortedRooms.forEach(room => {
             const option = document.createElement('option');
             option.value = room;
@@ -485,6 +550,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 filterAllEvents.classList.add('active-filter');
                 filterRoomEvents.classList.remove('active-filter');
                 calendarEl.style.display = 'block';
+                liveTrackerEl.style.display = 'grid';
                 roomsContainerEl.style.display = 'none';
                 calendar.render(); // Re-render to fix sizes
                 calendar.refetchEvents();
@@ -492,6 +558,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 filterAllEvents.classList.remove('active-filter');
                 filterRoomEvents.classList.add('active-filter');
                 calendarEl.style.display = 'none';
+                liveTrackerEl.style.display = 'none';
                 roomsContainerEl.style.display = 'block';
                 renderRoomsSchedule();
             }

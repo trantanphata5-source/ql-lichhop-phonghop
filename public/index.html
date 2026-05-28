@@ -15,7 +15,7 @@
         <!-- Header -->
         <header class="header">
             <div class="logo-area">
-                <div class="icon">📅</div>
+                <img src="logo.png" alt="Logo" class="site-logo">
                 <div class="title">
                     <h1>Quản lý lịch họp, Phòng họp</h1>
                     <p>Công ty Điện lực Vũng Tàu</p>
@@ -69,8 +69,26 @@
                 <p>Đang đồng bộ dữ liệu từ Outlook...</p>
             </div>
             
+            <!-- Live Meeting Tracker -->
+            <div id="live-meetings-tracker" class="live-tracker">
+                <div class="tracker-column ongoing">
+                    <h3><span class="status-dot blink"></span>Đang diễn ra</h3>
+                    <div id="ongoing-meetings-list" class="tracker-list">
+                        <div class="empty-state">Đang cập nhật...</div>
+                    </div>
+                </div>
+                <div class="tracker-column upcoming">
+                    <h3>🕒 Sắp diễn ra hôm nay</h3>
+                    <div id="upcoming-meetings-list" class="tracker-list">
+                        <div class="empty-state">Đang cập nhật...</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Standard FullCalendar (Lịch Chung) -->
-            <div id="calendar"></div>
+            <div id="calendar-container">
+                <div id="calendar"></div>
+            </div>
 
             <!-- Custom Rooms Schedule View (Lịch Phòng Họp) -->
             <div id="rooms-schedule-container" class="rooms-container" style="display: none;">
@@ -81,7 +99,7 @@
                     <button class="btn" id="btn-next-week">Tuần sau ❯</button>
                 </div>
                 <!-- Content will be injected here by app.js -->
-                <div id="rooms-cards-wrapper"></div>
+                <div id="rooms-cards-wrapper" class="rooms-cards-wrapper"></div>
             </div>
         </main>
     </div>
