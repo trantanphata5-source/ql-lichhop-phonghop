@@ -6,14 +6,14 @@ $scriptPath = Join-Path $PSScriptRoot "fetch_outlook.ps1"
 $outputPath = Join-Path $PSScriptRoot "public\debug_events.json"
 
 try {
-    # Chạy script lấy lịch
-    $json = & powershell -ExecutionPolicy Bypass -NoProfile -File $scriptPath
+    # Chạy script lấy lịch trong cùng tiến trình để giữ nguyên Encoding
+    $json = . $scriptPath
     
     # Kiểm tra tính hợp lệ của JSON trước khi ghi đè
     $testParse = $json | ConvertFrom-Json
     
-    # Ghi đè file JSON trong thư mục public
-    $json | Out-File -FilePath $outputPath -Encoding utf8 -Force
+    # Ghi đè file JSON bằng UTF-8 chuẩn (không BOM)
+    [System.IO.File]::WriteAllText($outputPath, $json, [System.Text.Encoding]::UTF8)
     Write-Host "Đã cập nhật dữ liệu mới vào: $outputPath"
     
     # Kiểm tra và tự động đẩy lên GitHub nếu có Git
