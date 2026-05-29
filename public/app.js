@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             endTime: '16:30',
         },
         nowIndicator: true,
+        eventDisplay: 'block',
         eventOrder: 'priority,start',
         events: fetchCalendarData,
         eventContent: function(arg) {
@@ -223,18 +224,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Logic cho Tab Lịch Chung (FullCalendar)
+        // Logic cho Tab Lịch Chung (FullCalendar)
     function filterAndRenderEvents(data, successCallback) {
         const filteredData = data;
 
         const busyEvents = filteredData.map(item => {
             if (!item || !item.start) return null;
-                        const roomCode = extractRoomName((item.location || '') + ' ' + (item.title || ''));
+            
+            const searchString = (item.location || '') + ' ' + (item.title || '');
+            const roomCode = extractRoomName(searchString);
+            
             let eventColor = '#7f8c8d'; // Mặc định cho Khác
-            if (roomCode === 'Phòng họp 1 (A206)') eventColor = '#e74c3c'; // Đỏ
-            else if (roomCode === 'Phòng họp 2 (A204)') eventColor = '#3498db'; // Xanh dương
-            else if (roomCode === 'Phòng họp 3 (A203)') eventColor = '#e67e22'; // Cam
-            else if (roomCode === 'Phòng họp 3 cũ (C203)') eventColor = '#9b59b6'; // Tím
-            else if (roomCode === 'Hội trường công ty') eventColor = '#1abc9c'; // Xanh lá
+            let priority = 2; // Khác
+            if (roomCode === 'Phòng họp 1 (A206)') { eventColor = '#e74c3c'; priority = 1; }
+            else if (roomCode === 'Phòng họp 2 (A204)') { eventColor = '#3498db'; priority = 1; }
+            else if (roomCode === 'Phòng họp 3 (A203)') { eventColor = '#e67e22'; priority = 1; }
+            else if (roomCode === 'Phòng họp 3 cũ (C203)') { eventColor = '#9b59b6'; priority = 1; }
+            else if (roomCode === 'Hội trường công ty') { eventColor = '#1abc9c'; priority = 1; }
+            
             return {
                 title: item.title || 'Cuộc họp',
                 start: item.start,
@@ -242,7 +249,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 location: item.location || '',
                 backgroundColor: eventColor,
                 borderColor: eventColor,
-                textColor: '#fff',
+                textColor: '#ffffff',
+                priority: priority,
                 classNames: ['busy-event']
             };
         }).filter(e => e !== null);
