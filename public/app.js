@@ -227,15 +227,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const busyEvents = filteredData.map(item => {
             if (!item || !item.start) return null;
-            
-            const roomCode = extractRoomName(item.location);
+                        const roomCode = extractRoomName(item.location);
             let eventColor = '#7f8c8d'; // Mặc định cho Khác
-            if (roomCode === 'Phòng họp 1 (A206)') eventColor = '#e74c3c';
-            else if (roomCode === 'Phòng họp 2 (A204)') eventColor = '#3498db';
-            else if (roomCode === 'Phòng họp 3 (A203)') eventColor = '#e67e22';
-            else if (roomCode === 'Phòng họp 3 cũ (C203)') eventColor = '#9b59b6';
-            else if (roomCode === 'Hội trường công ty') eventColor = '#1abc9c';
-            
+            if (roomCode === 'Phòng họp 1 (A206)') eventColor = '#e74c3c'; // Đỏ
+            else if (roomCode === 'Phòng họp 2 (A204)') eventColor = '#3498db'; // Xanh dương
+            else if (roomCode === 'Phòng họp 3 (A203)') eventColor = '#e67e22'; // Cam
+            else if (roomCode === 'Phòng họp 3 cũ (C203)') eventColor = '#9b59b6'; // Tím
+            else if (roomCode === 'Hội trường công ty') eventColor = '#1abc9c'; // Xanh lá
             return {
                 title: item.title || 'Cuộc họp',
                 start: item.start,
