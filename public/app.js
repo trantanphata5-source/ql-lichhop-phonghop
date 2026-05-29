@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         nowIndicator: true,
         showNonCurrentDates: false,
+        contentHeight: 'auto',
         eventDisplay: 'block',
         eventOrder: 'priority,start',
         events: fetchCalendarData,

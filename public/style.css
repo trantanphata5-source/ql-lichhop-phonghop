@@ -1,4 +1,4 @@
-﻿:root {
+:root {
     --primary-color: #005A9C; /* EVN Blue */
     --primary-light: #e6f0f9;
     --secondary-color: #F7941E; /* EVN Orange */
@@ -825,12 +825,9 @@ body {
 .calendar-legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    background: white;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
+    gap: 1.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
     justify-content: center;
 }
 
