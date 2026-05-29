@@ -94,13 +94,24 @@ document.addEventListener('DOMContentLoaded', function() {
         eventDisplay: 'block',
         eventOrder: 'priority,start',
         events: fetchCalendarData,
-        eventContent: function(arg) {
-            let customHtml = `
-                <div class="custom-event">
-                    <div class="event-title" title="${arg.event.title}">${arg.event.title}</div>
-                </div>
-            `;
-            return { html: customHtml };
+                eventContent: function(arg) {
+            if (arg.view.type === 'timeGridWeek' || arg.view.type === 'timeGridDay') {
+                const title = arg.event.title || 'Cuộc họp';
+                const location = arg.event.extendedProps.location;
+                const timeText = arg.timeText || '';
+                
+                let customHtml = '<div class="fc-custom-timegrid-event">' +
+                                 '<div class="fc-custom-time">' + timeText + '</div>' +
+                                 '<div class="fc-custom-title" title="' + title.replace(/"/g, '&quot;') + '">' + title + '</div>' +
+                                 (location ? '<div class="fc-custom-location" title="' + location.replace(/"/g, '&quot;') + '">📍 ' + location + '</div>' : '') +
+                                 '</div>';
+                return { html: customHtml };
+            } else {
+                let customHtml = '<div class="custom-event">' +
+                                 '<div class="event-title" title="' + (arg.event.title || '').replace(/"/g, '&quot;') + '">' + arg.event.title + '</div>' +
+                                 '</div>';
+                return { html: customHtml };
+            }
         },
         eventClick: function(info) {
             openEventModal(info.event.title, info.event.start, info.event.end, info.event.extendedProps.location);
