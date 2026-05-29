@@ -742,3 +742,82 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* --- Mobile Optimizations --- */
+@media (max-width: 768px) {
+    .app-container {
+        padding: 0.5rem;
+        width: 100%;
+        gap: 1rem;
+    }
+    
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .logo-area {
+        align-items: flex-start !important;
+    }
+    .site-logo {
+        height: 40px;
+        margin-right: 0.75rem;
+    }
+    .title h1 {
+        font-size: 1.1rem !important;
+    }
+
+    .header-right {
+        flex-direction: column;
+        width: 100%;
+        align-items: stretch;
+    }
+    .tabs {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .tab-btn {
+        flex: 1;
+        text-align: center;
+        padding: 0.6rem;
+    }
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .filters-area {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+    .filter-group {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+    
+    /* FullCalendar overrides for mobile */
+    .fc .fc-toolbar {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    .fc .fc-toolbar-title {
+        font-size: 1.25em !important;
+    }
+    .calendar-main {
+        padding: 0.5rem;
+    }
+    
+    /* Live tracker */
+    .live-tracker {
+        width: 100% !important;
+    }
+    
+    /* Make FC events wrap if they are too long on small screens */
+    .fc-event-title {
+        white-space: normal !important;
+    }
+}

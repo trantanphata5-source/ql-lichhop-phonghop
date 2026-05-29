@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             endTime: '16:30',
         },
         nowIndicator: true,
+        dayMaxEvents: true, // Enables "+X more" link
         events: fetchCalendarData,
         eventContent: function(arg) {
             let customHtml = `
