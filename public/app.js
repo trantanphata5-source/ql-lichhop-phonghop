@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             endTime: '16:30',
         },
         nowIndicator: true,
+        eventOrder: 'priority,start',
         events: fetchCalendarData,
         eventContent: function(arg) {
             let customHtml = `
@@ -227,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const busyEvents = filteredData.map(item => {
             if (!item || !item.start) return null;
-                        const roomCode = extractRoomName(item.location);
+                        const roomCode = extractRoomName((item.location || '') + ' ' + (item.title || ''));
             let eventColor = '#7f8c8d'; // Mặc định cho Khác
             if (roomCode === 'Phòng họp 1 (A206)') eventColor = '#e74c3c'; // Đỏ
             else if (roomCode === 'Phòng họp 2 (A204)') eventColor = '#3498db'; // Xanh dương
