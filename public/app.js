@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             endTime: '16:30',
         },
         nowIndicator: true,
+        showNonCurrentDates: false,
         eventDisplay: 'block',
         eventOrder: 'priority,start',
         events: fetchCalendarData,
